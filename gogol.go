@@ -175,7 +175,7 @@ func main() {
 		coord{5, 5},
 		coord{1, 3})
 
-	fmt.Println("first gen", b)
+	fmt.Println("First Generation\n", b)
 
 	generations := 15
 
