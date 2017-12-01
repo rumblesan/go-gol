@@ -41,27 +41,33 @@ func (b *board) cellHealth(c coord) bool {
 	return b.cells[c]
 }
 
+func (b *board) cToStr(c coord) string {
+	if b.cellHealth(c) {
+		return "X"
+	} else {
+		return "."
+	}
+}
+
 func (b *board) getBounds() (coord, coord) {
-	xMax := 0
-	xMin := 0
-	yMax := 0
-	yMin := 0
+	min := coord{}
+	max := coord{}
 
 	for c := range b.cells {
-		if c.x < xMin {
-			xMin = c.x
+		if c.x < min.x {
+			min.x = c.x
 		}
-		if c.x > xMax {
-			xMax = c.x
+		if c.x > max.x {
+			max.x = c.x
 		}
-		if c.y < yMin {
-			yMin = c.y
+		if c.y < min.y {
+			min.y = c.y
 		}
-		if c.y > yMax {
-			yMax = c.y
+		if c.y > max.y {
+			max.y = c.y
 		}
 	}
-	return coord{xMin, yMin}, coord{xMax, yMax}
+	return min, max
 }
 
 func (b board) String() string {
@@ -95,11 +101,7 @@ func (b board) String() string {
 			output += " " + strconv.Itoa(y)
 		}
 		for x := min.x; x <= max.x; x += 1 {
-			if b.cellHealth(coord{x, y}) {
-				output += "X"
-			} else {
-				output += "."
-			}
+			output += b.cToStr(coord{x, y})
 		}
 		output += "\n"
 	}
