@@ -41,10 +41,7 @@ func (b *board) cellHealth(c coord) bool {
 	return b.cells[c]
 }
 
-func (b board) String() string {
-
-	output := "Board\n"
-
+func (b *board) getBounds() (coord, coord) {
 	xMax := 0
 	xMin := 0
 	yMax := 0
@@ -64,9 +61,17 @@ func (b board) String() string {
 			yMax = c.y
 		}
 	}
+	return coord{xMin, yMin}, coord{xMax, yMax}
+}
+
+func (b board) String() string {
+
+	output := "Board\n"
+
+	min, max := b.getBounds()
 
 	output += "  "
-	for x := xMin; x < xMax; x += 1 {
+	for x := min.x; x < max.x; x += 1 {
 		if x < 0 {
 			output += "|"
 		} else {
@@ -74,7 +79,7 @@ func (b board) String() string {
 		}
 	}
 	output += "\n  "
-	for x := xMin; x <= xMax; x += 1 {
+	for x := min.x; x <= max.x; x += 1 {
 		if x < 0 {
 			output += strconv.Itoa(x * -1)
 		} else {
@@ -83,13 +88,13 @@ func (b board) String() string {
 	}
 	output += "\n"
 
-	for y := yMin; y <= yMax; y += 1 {
+	for y := min.y; y <= max.y; y += 1 {
 		if y < 0 {
 			output += strconv.Itoa(y)
 		} else {
 			output += " " + strconv.Itoa(y)
 		}
-		for x := xMin; x <= xMax; x += 1 {
+		for x := min.x; x <= max.x; x += 1 {
 			if b.cellHealth(coord{x, y}) {
 				output += "X"
 			} else {
